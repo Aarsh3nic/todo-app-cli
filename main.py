@@ -1,23 +1,25 @@
 
 
 def display():
-    with open("todos.txt", "r") as file:
-        arr = file.readlines()
-
+    taskList = getTaskList()
     print("Here's the list:")
-    for task in enumerate(arr, start=1):
+    for task in enumerate(taskList, start=1):
         print(f" {task[0]}| {task[1]}",end="")
-    return arr
 
 def modifyText(arr, message):
     with open("todos.txt", "w") as file:
         file.writelines(arr)
     print(message)
 
+def getTaskList():
+    with open("todos.txt", "r") as file:
+        taskList = file.readlines()
+        return taskList
+
 while True:
     user_action = input("Type add, show, edit or exit:").strip()
 
-    if "add" in user_action[0:3]:
+    if user_action.startswith("add"):
         todo = user_action[4:].title() + "\n"
 
         with open("todos.txt", "r") as file:
@@ -27,27 +29,40 @@ while True:
 
         modifyText(todos,"Added!")
 
-    elif "show" in user_action[0:7]:
+    elif user_action.startswith("show"):
         display()
 
-    elif "edit" in user_action[0:4]:
-        display()
-        num_task = int(user_action[5:])
-        todos[num_task-1] = input("Enter new task: ") +  "\n"
-        modifyText(todos,"Modified!")
 
-    elif "complete" in user_action[0:8]:
+    elif user_action.startswith("edit"):
+        try:
+            num_task = int(user_action[5:])
+            todos = getTaskList()
+            todos[num_task-1] = input("Enter new task: ") +  "\n"
+            modifyText(todos,"Modified!")
+        except ValueError:
+            print("Invalid input, Enter the in format: COMMAND NUMBER\n")
+            continue
+        except IndexError:
+            print(f"No item found at {num_task}.\n")
+            continue
 
-        num_task = int(user_action[9:])
-        with open("todos.txt", "r") as file:
-            todos = file.readlines()
-        to_be_removed = todos[num_task-1]
-        todos.pop(num_task-1)
-        modifyText(todos, f"{to_be_removed[:len(to_be_removed)-1]} removed from the list!")
-        #display()
+    elif user_action.startswith("complete"):
+        try:
+            num_task = int(user_action[9:])
+            todos = getTaskList()
+            to_be_removed = todos[num_task-1]
+            todos.pop(num_task-1)
+            modifyText(todos, f"{to_be_removed[:len(to_be_removed)-1]} removed from the list!")
+        except ValueError:
+            print("Invalid input, Enter the in format: COMMAND NUMBER\n")
+            continue
+        except IndexError:
+            print(f"No item found at {num_task}.\n")
+            continue
 
 
-    elif "exit" in user_action[0:4]:
+
+    elif user_action.startswith("exit"):
         break
 
     else: print("Invalid input")
