@@ -1,58 +1,58 @@
 
 
 def display():
-    file = open("todos.txt", "r")
-    arr = file.readlines()
-    file.close()
+    with open("todos.txt", "r") as file:
+        arr = file.readlines()
+
     print("Here's the list:")
     for task in enumerate(arr, start=1):
-        print(f" {task[0]}| {task[1].title()}",end="")
+        print(f" {task[0]}| {task[1]}",end="")
+    return arr
 
 def modifyText(arr, message):
-    file = open("todos.txt", "w")
-    file.writelines(arr)
-    file.close()
+    with open("todos.txt", "w") as file:
+        file.writelines(arr)
     print(message)
 
 while True:
     user_action = input("Type add, show, edit or exit:").strip()
-    match user_action:
-        case "add":
-            todo = input("Enter to-do:") + "\n"
 
-            file = open("todos.txt", "r")
+    if "add" in user_action[0:3]:
+        todo = user_action[4:].title() + "\n"
+
+        with open("todos.txt", "r") as file:
             todos = file.readlines()
-            file.close()
 
-            todos.append(todo)
+        todos.append(todo)
 
-            modifyText(todos,"Added!")
+        modifyText(todos,"Added!")
 
-        case "show" | "display":
-            display()
-        case "edit":
-            display()
-            num_task = int(input("What task you want to edit (type number): "))
-            todos[num_task-1] = input("Enter new task: ") +  "\n"
-            modifyText(todos,"Modified!")
+    elif "show" in user_action[0:7]:
+        display()
 
-        case "complete":
-            display()
-            num_task = int(input("What task you want to mark as complete (type number): "))
-            todos.pop(num_task-1)
-            modifyText(todos, "Modified!")
-            display()
+    elif "edit" in user_action[0:4]:
+        display()
+        num_task = int(user_action[5:])
+        todos[num_task-1] = input("Enter new task: ") +  "\n"
+        modifyText(todos,"Modified!")
+
+    elif "complete" in user_action[0:8]:
+
+        num_task = int(user_action[9:])
+        with open("todos.txt", "r") as file:
+            todos = file.readlines()
+        to_be_removed = todos[num_task-1]
+        todos.pop(num_task-1)
+        modifyText(todos, f"{to_be_removed[:len(to_be_removed)-1]} removed from the list!")
+        #display()
 
 
-        case "exit":
-            break
-        case _:
-            print("Invalid Input")
+    elif "exit" in user_action[0:4]:
+        break
+
+    else: print("Invalid input")
 
 
 print("Bye")
 
-def display(arr):
-    print("Here's the list:")
-    for task in enumerate(arr, start=1):
-        print(f" {task[0]}| {task[1].title()}")
+#new_todos = [item.strip('\n') for item in todos]
