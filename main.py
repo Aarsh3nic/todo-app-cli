@@ -1,20 +1,4 @@
-
-
-def display():
-    taskList = getTaskList()
-    print("Here's the list:")
-    for task in enumerate(taskList, start=1):
-        print(f" {task[0]}| {task[1]}",end="")
-
-def modifyText(arr, message):
-    with open("todos.txt", "w") as file:
-        file.writelines(arr)
-    print(message)
-
-def getTaskList():
-    with open("todos.txt", "r") as file:
-        taskList = file.readlines()
-        return taskList
+from functions import *
 
 while True:
     user_action = input("Type add, show, edit or exit:").strip()
@@ -22,8 +6,7 @@ while True:
     if user_action.startswith("add"):
         todo = user_action[4:].title() + "\n"
 
-        with open("todos.txt", "r") as file:
-            todos = file.readlines()
+        todos = getTaskList()
 
         todos.append(todo)
 
