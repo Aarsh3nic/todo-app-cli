@@ -1,7 +1,10 @@
 from functions import *
+import time
 
+now = time.strftime("%b %d, %Y %H:%M:%S")
+print(now)
 while True:
-    user_action = input("Type add, show, edit or exit:").strip()
+    user_action = input("Type add, show, edit, complete or exit:").strip()
 
     if user_action.startswith("add"):
         todo = user_action[4:].title() + "\n"

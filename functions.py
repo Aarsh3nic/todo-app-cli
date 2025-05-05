@@ -1,3 +1,5 @@
+FILEPATH = "todos.txt"
+
 def display():
     """Reads and displays the list present in the text file"""
 
@@ -7,16 +9,16 @@ def display():
         print(f" {task[0]}| {task[1]}",end="")
 
 
-def modifyText(taskList, message,filePath="todos.txt"):
+def modifyText(taskList, message,filePath=FILEPATH):
     """Writes the given list to the text file"""
 
     with open(filePath, "w") as file:
         file.writelines(taskList)
     print(message)
 
-def getTaskList(filePath="todos.txt"):
+def getTaskList(filePath=FILEPATH):
     """Returns the list of todos from the given text file"""
 
-    with open(filePath, "r") as file:
+    with open(filePath, "r") as file: 
         taskList = file.readlines()
         return taskList
